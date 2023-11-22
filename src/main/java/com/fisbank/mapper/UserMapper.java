@@ -1,10 +1,7 @@
 package com.fisbank.mapper;
 
-import com.fisbank.dto.request.UserRequest;
 import com.fisbank.dto.response.UserResponse;
-import org.apache.catalina.User;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,6 +12,7 @@ public interface UserMapper {
 
     String getNextId();
 
+    UserResponse findByUsername(String email);
     int totalUser();
     List<UserResponse> getListUser(UserResponse response);
 
@@ -22,4 +20,6 @@ public interface UserMapper {
     int delete(String id);
     int countIdUser(UserResponse response);
     int isUserDeleted(String id);
+
+
 }

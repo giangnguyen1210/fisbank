@@ -1,13 +1,20 @@
 package com.fisbank.service.impl;
 import com.fisbank.common.CommonService;
 import com.fisbank.dto.request.UserRequest;
+import com.fisbank.dto.response.AuthResponse;
 import com.fisbank.dto.response.UserResponse;
 import com.fisbank.dto.response.base.BaseResponse;
 import com.fisbank.mapper.UserMapper;
+import com.fisbank.security.JwtGenerator;
 import com.fisbank.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;
 
@@ -20,11 +27,21 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private CommonService service;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtGenerator jwtGenerator;
     @Override
     public BaseResponse createUser(UserResponse request) {
         BaseResponse baseResponse = new BaseResponse();
-        String hashedPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt(10));
+        String hashedPassword = passwordEncoder.encode(request.getPassword());
         request.setPassword(hashedPassword);
+        request.setRoleId("1");
         if (request.getName() != null && request.getEmail() != null
         ) {
             String id = "FISBANK-";
@@ -136,4 +153,31 @@ public class UserServiceImpl implements UserService {
         }
         return baseResponse;
     }
+
+    @Override
+    public AuthResponse login(UserResponse response) {
+
+        UserResponse user = userMapper.findByUsername(response.getEmail());
+        AuthResponse authResponse = new AuthResponse("");
+        if(response.getEmail()==null || response.getPassword()==null){
+            authResponse.setErrorCode("Email or password is empty");
+        }else{
+            if(passwordEncoder.matches(response.getPassword(), user.getPassword())){
+                Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(response.getEmail(), response.getPassword())
+                );
+                System.out.printf(authentication.getName());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                String token = jwtGenerator.generateToken(authentication);
+                authResponse.setAccessToken(token);
+                authResponse.setData("Login thanh cong");
+            }else{
+                authResponse.setErrorCode("Mat khau khong trung khop");
+            }
+
+        }
+        return authResponse;
+    }
+
+
 }

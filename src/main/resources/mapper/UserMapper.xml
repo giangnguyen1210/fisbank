@@ -77,4 +77,7 @@
           </where>
 
     </select>
+    <select id="findByUsername" resultType="com.fisbank.dto.response.UserResponse">
+        select * from users where email=#{email} limit 1
+    </select>
 </mapper>
