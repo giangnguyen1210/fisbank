@@ -30,6 +30,10 @@ public class UserController {
         return new ResponseEntity<>(userService.editUser(response), HttpStatus.OK);
     }
 
+    @PostMapping("/detail")
+    public ResponseEntity<?> getUserDetail(String id){
+        return null;
+    }
     @PostMapping(value = "/delete")
     public ResponseEntity<BaseResponse> deleteBankById(@RequestBody UserResponse user)   {
         return new ResponseEntity<>(userService.deleteUser(user.getId()), HttpStatus.OK);
