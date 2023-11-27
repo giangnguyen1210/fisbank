@@ -6,16 +6,17 @@ import { AppService } from './app.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent{
+export class AppComponent implements OnInit{
   users: any[] = [];
 
   constructor(private apiService: AppService) { }
 
   ngOnInit() {
     this.apiService.getAllUser().subscribe((data) => {
-      this.users = data;
+      this.users = data.data;
+      console.log(data.data);
     });
-    console.log("object");
+    // console.log("object");
   }
 
 
