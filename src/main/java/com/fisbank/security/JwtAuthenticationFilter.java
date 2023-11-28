@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.net.http.HttpHeaders;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
@@ -23,8 +24,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = getJwtFromRequest(request);
+
+//        System.out.println(token);
+
         if(StringUtils.hasText(token) && tokenGenerator.validateToken(token)){
             String email = tokenGenerator.getEmailFromJwt(token);
+            System.out.println(email);
 
             UserDetails userDetails = customUserDetailService.loadUserByUsername(email);
             UsernamePasswordAuthenticationToken authenticationToken = new
@@ -37,8 +42,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     public String getJwtFromRequest(HttpServletRequest request){
+//        System.out.println(request.);
         String bearerToken = request.getHeader("Authorization");
+//        System.out.println(bearerToken);
         if(StringUtils.hasText(bearerToken)&&bearerToken.startsWith("Bearer ")){
+            System.out.println(bearerToken.substring(7,bearerToken.length()));
             return bearerToken.substring(7,bearerToken.length());
         }
         return null;

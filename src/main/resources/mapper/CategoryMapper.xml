@@ -27,4 +27,7 @@
     <select id="getCategoryId" resultType="java.lang.Integer">
         select id from category where id=#{id}
     </select>
+    <select id="getListCategory" resultType="com.fisbank.dto.response.CategoryResponse">
+        select * from category
+    </select>
 </mapper>

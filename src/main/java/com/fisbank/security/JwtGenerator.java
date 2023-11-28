@@ -1,9 +1,6 @@
 package com.fisbank.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
@@ -38,12 +35,18 @@ public class JwtGenerator {
     }
 
     public boolean validateToken(String token){
-        try{
-            Jwts.parser().setSigningKey(SecurityConstants.JWT_SECRET).parseClaimsJws(token);
+        try {
+            Jwts.parser().setSigningKey(key).parseClaimsJws(token);
             return true;
-        }catch (Exception e){
-            throw new AuthenticationCredentialsNotFoundException("Jwt was expired or incorrect");
+        } catch (ExpiredJwtException e) {
+            System.out.println("Token expired");
+            throw new AuthenticationCredentialsNotFoundException("Jwt was expired");
+        } catch (MalformedJwtException | SignatureException | IllegalArgumentException e) {
+            System.out.println("Invalid token");
+            throw new AuthenticationCredentialsNotFoundException("Jwt was incorrect");
         }
     }
+
+
 
 }

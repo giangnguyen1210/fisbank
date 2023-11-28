@@ -1,12 +1,15 @@
 package com.fisbank.service.impl;
 
 import com.fisbank.dto.response.CategoryResponse;
+import com.fisbank.dto.response.UserResponse;
 import com.fisbank.dto.response.base.BaseResponse;
 import com.fisbank.mapper.CategoryMapper;
 import com.fisbank.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -57,6 +60,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public BaseResponse getAllCategory(CategoryResponse categoryResponse) {
-        return null;
+        BaseResponse baseResponse = new BaseResponse();
+        List<CategoryResponse> list = categoryMapper.getListCategory(categoryResponse);
+        int totalUser = categoryMapper.totalCategory();
+        baseResponse.setTotalRecords(totalUser);
+        baseResponse.setData(list);
+        return baseResponse;
     }
 }
