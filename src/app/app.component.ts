@@ -16,7 +16,7 @@ export class AppComponent implements OnInit{
       this.users = data.data;
       console.log(data.data);
     });
-    // console.log("object");
+    console.log("object");
   }
 
 
