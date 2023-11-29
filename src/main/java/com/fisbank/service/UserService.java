@@ -14,6 +14,4 @@ public interface UserService {
 
     BaseResponse deleteUser(String id);
 
-    BaseResponse login(UserResponse response);
-
 }

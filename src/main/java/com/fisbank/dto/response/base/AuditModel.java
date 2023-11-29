@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class AuditModel {
     private String userId;
-    private Date createTime;
+    private Date createTime=new Date();
     private String creator;
     private Date editTime;
     private String editor;

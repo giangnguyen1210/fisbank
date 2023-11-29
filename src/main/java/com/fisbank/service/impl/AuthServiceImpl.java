@@ -1,27 +1,23 @@
 package com.fisbank.service.impl;
+
 import com.fisbank.common.CommonService;
-import com.fisbank.dto.request.UserRequest;
 import com.fisbank.dto.response.AuthResponse;
 import com.fisbank.dto.response.UserResponse;
 import com.fisbank.dto.response.base.BaseResponse;
 import com.fisbank.mapper.UserMapper;
 import com.fisbank.security.JwtGenerator;
-import com.fisbank.service.UserService;
+import com.fisbank.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.google.common.base.Strings;
-
-import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class AuthServiceImpl implements AuthService {
     @Autowired
     private UserMapper userMapper;
 
@@ -36,8 +32,33 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private JwtGenerator jwtGenerator;
+
     @Override
-    public BaseResponse createUser(UserResponse request) {
+    public AuthResponse login(UserResponse response) {
+
+        UserResponse user = userMapper.findByUsername(response.getEmail());
+        AuthResponse authResponse = new AuthResponse("");
+        if(response.getEmail()==null || response.getPassword()==null){
+            authResponse.setErrorCode("Email or password is empty");
+        }else{
+            if(passwordEncoder.matches(response.getPassword(), user.getPassword())){
+                Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(response.getEmail(), response.getPassword())
+                );
+                System.out.printf(authentication.getName());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                String token = jwtGenerator.generateToken(authentication);
+                authResponse.setAccessToken(token);
+                authResponse.setData("Login thanh cong");
+            }else{
+                authResponse.setErrorCode("Mat khau khong trung khop");
+            }
+
+        }
+        return authResponse;
+    }
+    @Override
+    public BaseResponse register(UserResponse request) {
         BaseResponse baseResponse = new BaseResponse();
         String hashedPassword = passwordEncoder.encode(request.getPassword());
         request.setPassword(hashedPassword);
@@ -88,73 +109,4 @@ public class UserServiceImpl implements UserService {
         }
         return baseResponse;
     }
-
-    @Override
-    public BaseResponse getListUser(UserResponse request) {
-        BaseResponse baseResponse = new BaseResponse();
-        List<UserResponse> list = userMapper.getListUser(request);
-        int totalUser = userMapper.totalUser();
-        baseResponse.setTotalRecords(totalUser);
-        baseResponse.setData(list);
-        return baseResponse;
-    }
-
-    @Override
-    public BaseResponse editUser(UserResponse request) {
-        BaseResponse baseResponse = new BaseResponse();
-//        System.out.println(userMapper.isUserDeleted(request.getId()));
-
-        if (request == null || Strings.isNullOrEmpty(request.getName())
-                || Strings.isNullOrEmpty(request.getEmail())) {
-            return new BaseResponse(String.valueOf(HttpStatus.BAD_REQUEST.value()),
-                    "Fields is required");
-        }
-        if(userMapper.checkEmailExist(request.getEmail())>0){
-            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc(
-                    "email đã tồn tại"
-            );
-            return baseResponse;
-        }
-        int b = userMapper.editUser(request);
-        if (b !=0) {
-            baseResponse.setData(request);
-//                baseResponse.setCreator();
-            baseResponse.setErrorCode(HttpStatus.OK.name());
-            baseResponse.setTotalRecords(userMapper.totalUser());
-            baseResponse.setErrorDesc("chỉnh sửa người dùng thành công");
-        } else {
-            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("chỉnh sửa người dùng thất bại");
-            return baseResponse;
-        }
-        return baseResponse;
-    }
-
-    @Override
-    public BaseResponse deleteUser(String id) {
-        BaseResponse baseResponse = new BaseResponse();
-        if (id != null && !id.isEmpty()) {
-            int rs = userMapper.delete(id);
-            if (rs > 0) {
-                baseResponse.setData(rs);
-                baseResponse.setErrorCode(HttpStatus.OK.name());
-                baseResponse.setErrorDesc(
-                        "Delete Bank success");
-            } else {
-                baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-                baseResponse.setErrorDesc(
-                        "Delete Bank failed");
-                return baseResponse;
-            }
-        } else {
-            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            return baseResponse;
-        }
-        return baseResponse;
-    }
-
-
-
-
 }
