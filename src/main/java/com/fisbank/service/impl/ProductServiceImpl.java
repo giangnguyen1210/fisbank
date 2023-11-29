@@ -1,5 +1,6 @@
 package com.fisbank.service.impl;
 
+import com.fisbank.dto.response.CategoryResponse;
 import com.fisbank.dto.response.Image;
 import com.fisbank.dto.response.ProductResponse;
 import com.fisbank.dto.response.base.BaseResponse;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
+
 @Service
 public class ProductServiceImpl implements ProductService {
     @Autowired
@@ -26,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
     private ImageMapper imageMapper;
 
     @Override
-    public BaseResponse addNewProduct(ProductResponse productResponse) throws IOException {
+    public BaseResponse addNewProduct(ProductResponse productResponse)  {
         BaseResponse baseResponse = new BaseResponse();
         System.out.println(productResponse.getName());
 
@@ -71,6 +74,16 @@ public class ProductServiceImpl implements ProductService {
             return baseResponse;
         }
 
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse getAllProduct(ProductResponse productResponse) {
+        BaseResponse baseResponse = new BaseResponse();
+        List<ProductResponse> list = productMapper.getListProduct(productResponse);
+        int totalUser = productMapper.totalProduct();
+        baseResponse.setTotalRecords(totalUser);
+        baseResponse.setData(list);
         return baseResponse;
     }
 }

@@ -6,5 +6,7 @@ import com.fisbank.dto.response.base.BaseResponse;
 import java.io.IOException;
 
 public interface ProductService {
-    BaseResponse addNewProduct(ProductResponse productResponse) throws IOException;
+    BaseResponse addNewProduct(ProductResponse productResponse);
+    BaseResponse getAllProduct(ProductResponse productResponse);
+
 }

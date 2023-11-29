@@ -35,5 +35,9 @@
     <select id="totalProduct" resultType="java.lang.Integer">
         select count(*) from product
     </select>
+    <select id="getListProduct" resultType="com.fisbank.dto.response.ProductResponse">
+        select * from product where is_deleted=0
+    </select>
+
 
 </mapper>

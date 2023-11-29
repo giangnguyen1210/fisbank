@@ -28,11 +28,6 @@ public class CategoryController {
     public ResponseEntity<BaseResponse> updateCategory(@RequestBody CategoryResponse categoryResponse){
         return new ResponseEntity<>(categoryService.updateCategory(categoryResponse), HttpStatus.OK);
     }
-
-    @GetMapping("/list")
-    public ResponseEntity<BaseResponse> listCategory1(@RequestBody CategoryResponse categoryResponse){
-        return new ResponseEntity<>(categoryService.getAllCategory(categoryResponse), HttpStatus.OK);
-    }
     @PostMapping("/list")
     public ResponseEntity<BaseResponse> listCategory(@RequestBody CategoryResponse categoryResponse){
         return new ResponseEntity<>(categoryService.getAllCategory(categoryResponse), HttpStatus.OK);

@@ -1,5 +1,6 @@
 package com.fisbank.controller;
 
+import com.fisbank.dto.response.CategoryResponse;
 import com.fisbank.dto.response.ProductResponse;
 import com.fisbank.dto.response.base.BaseResponse;
 import com.fisbank.service.ProductService;
@@ -18,7 +19,13 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping(value="/add",consumes = "application/json")
-    public ResponseEntity<BaseResponse> addNewProduct(@RequestBody ProductResponse productResponse) throws IOException {
-        return new ResponseEntity(productService.addNewProduct(productResponse), HttpStatus.OK);
+    public ResponseEntity<BaseResponse> addNewProduct(@RequestBody ProductResponse productResponse) {
+        return new ResponseEntity<>(productService.addNewProduct(productResponse), HttpStatus.OK);
     }
+
+    @PostMapping("/list")
+    public ResponseEntity<BaseResponse> listProduct(@RequestBody ProductResponse productResponse){
+        return new ResponseEntity<>(productService.getAllProduct(productResponse), HttpStatus.OK);
+    }
+
 }
