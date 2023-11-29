@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AsyncValidatorFn, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable, catchError, map, of } from 'rxjs';
-import { ApiService } from 'src/app/core/services/ap\bi.service';
+import { AuthService } from 'src/app/core/services/auth.service';
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
@@ -9,7 +10,8 @@ import { ApiService } from 'src/app/core/services/ap\bi.service';
 })
 export class SignInComponent {
   loginForm: FormGroup;
-  constructor(private formBuilder: FormBuilder, private apiService:ApiService) {
+
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private readonly _router: Router) {
     this.loginForm = this.formBuilder.group({
       email: ['', {
         validators: [Validators.required, Validators.email],
@@ -19,7 +21,14 @@ export class SignInComponent {
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
- 
+
+  ngOnInit() {
+   if(this.authService.isLoggedIn()){
+    this._router.navigate(['/'])
+      return ;
+   }
+  }
+
 
   emailAsyncValidator(): AsyncValidatorFn {
     return (control): Observable<{ [key: string]: any } | null> => {
@@ -35,8 +44,6 @@ export class SignInComponent {
 
   // Simulated asynchronous operation (replace with your actual API call)
   private checkEmailAvailability(email: string): Observable<boolean> {
-    // Replace this with your actual API call or asynchronous operation
-    // For demonstration purposes, always return true here
     return of(true);
   }
 
@@ -48,18 +55,20 @@ export class SignInComponent {
         password: this.loginForm.value.password
       };
 
-      this.apiService.login(user).subscribe(
+      this.authService.login(user).subscribe(
         (response) => {
-          this.apiService.setJwtToken(response.accessToken);
-          console.log(response.accessToken);
+          this.authService.setJwtToken(response.accessToken);
+          if(this.authService.isLoggedIn()){
+            this._router.navigate(['/dashboard'])
+          }
+          // console.log(response.accessToken);
         },
         (error) => {
           console.error('Login error', error);
         }
       );
+      
+      // this.router.navigate(['/home']);
     }
-
-    console.log(this.loginForm.valid);
-    console.log("hello");
   }
 }

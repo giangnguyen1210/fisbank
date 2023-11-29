@@ -5,9 +5,13 @@ import { Observable, catchError, map, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {
+export class AuthService {
 
-  private apiUrl = 'http://localhost:8080/api/v1';
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  private apiUrl = 'http://localhost:4400/api/v1';
   constructor(private http: HttpClient) { }
 
  
@@ -28,8 +32,7 @@ export class ApiService {
   
   
   login(user: { email: string; password: string }): Observable<any> {
-    const loginUrl = `${this.apiUrl}/auth/login`; // Replace with your login API endpoint
-    // Make an HTTP POST request to the login API endpoint
+    const loginUrl = `${this.apiUrl}/auth/login`; 
     return this.http.post(loginUrl, user).pipe(
       map((response) => {
         return response;
@@ -41,21 +44,30 @@ export class ApiService {
 
   }
 
-
+  logout(): void {
+    localStorage.removeItem(this.TOKEN_KEY);
+  }
+  
   getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
-   
-    // console.log(token);
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjZHNzQGdtYWlsLmNvbSIsImlhdCI6MTcwMTE4Mjc5NywiZXhwIjoxNzAxMTg0MjM3fQ.vUWSIuZnZI9dztO4dTNiO5X93AQbdqxNHRmzlomR0mZ8jdZeO_ctM4jvoycF0nkr8auwAQ-_Tohl0ndcuyGp2A`,
-    });
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+  
+    console.log('Token:', token);
+    console.log('Headers:', headers);
+  
+    return headers;
   }
   getDataCategory(): Observable<any> {
-    console.log(this.getHeaders());
-    const url = `${this.apiUrl}/admin/category/list`; // Replace with your API endpoint
+    const url = `${this.apiUrl}/admin/category/list`;
     const headers = this.getHeaders();
-    return this.http.get(url, { headers });
-    // return this.http.post(url, {}, {headers });
+  
+    console.log('Headers in getDataCategory:', this.getHeaders());
+  
+    return this.http.post(url, {},{ headers });
   }
+    
 }
