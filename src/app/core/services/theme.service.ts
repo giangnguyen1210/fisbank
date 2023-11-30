@@ -5,33 +5,21 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ThemeService {
-  private _isLoading = true; // Private variable to store the loading status
+  private isDark: boolean = this.getTheme();
 
-  get isLoading(): boolean {
-    return this._isLoading;
-  }
-
-  set isLoading(value: boolean) {
-    this._isLoading = value;
-  }
-
-  private _isDark = this.getTheme();
-
-  get darkMode(): boolean {
-    return this._isDark;
-  }
-
-  toggleTheme(): void {
-    this._isDark = !this._isDark;
-    this.setTheme(this._isDark);
-  }
+  constructor() {}
 
   private getTheme(): boolean {
     const storedTheme = localStorage.getItem('dark');
-    return storedTheme ? JSON.parse(storedTheme) : !!window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return storedTheme ? JSON.parse(storedTheme) : window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
 
-  private setTheme(value: boolean): void {
-    localStorage.setItem('dark', JSON.stringify(value));
+  toggleTheme(): void {
+    this.isDark = !this.isDark;
+    localStorage.setItem('dark', JSON.stringify(this.isDark));
+  }
+
+  getIsDark(): boolean {
+    return this.isDark;
   }
 }

@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { Component } from '@angular/core';
+import { CategoryService } from 'src/app/core/services/category.service';
 
 @Component({
   selector: 'app-category-management',
   templateUrl: './category-management.component.html',
   styleUrls: ['./category-management.component.scss']
 })
-export class CategoryManagementComponent implements OnInit {
-  constructor(private apiService: AuthService) {}
+export class CategoryManagementComponent {
+  constructor(private categoryService: CategoryService) {}
 
   total: number | undefined;
 
   ngOnInit(): void {
-    this.apiService.getDataCategory().subscribe(
+    this.categoryService.getCategoryList().subscribe(
       (data) => {
         console.log('API Response:', data);
         this.total=data.totalRecords;

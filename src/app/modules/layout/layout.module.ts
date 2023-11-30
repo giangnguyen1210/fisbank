@@ -5,11 +5,13 @@ import { LayoutRoutingModule } from './layout-routing.module';
 import { LayoutComponent } from './layout.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 @NgModule({
   declarations: [
     LayoutComponent,
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    SidebarComponent,
   ],
   imports: [CommonModule, LayoutRoutingModule, HttpClientModule],
 })
