@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductService } from 'src/app/core/services/product.service';
 
 @Component({
-  selector: 'app-product-management',
-  templateUrl: './product-management.component.html',
-  styleUrls: ['./product-management.component.scss']
+  selector: 'app-product-summary',
+  templateUrl: './product-summary.component.html',
+  styleUrls: ['./product-summary.component.scss']
 })
-export class ProductManagementComponent {
+export class ProductSummaryComponent implements OnInit {
   constructor(private productService: ProductService, private router: Router) {}
 
   total: number | undefined;

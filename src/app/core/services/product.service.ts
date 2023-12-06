@@ -3,7 +3,7 @@ import { environment } from 'src/environments/environment.development';
 import { HeaderService } from './header.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { ProductList } from '../models/product.model';
+import { Image, ProductList } from '../models/product.model';
 
 @Injectable({
   providedIn: 'root'
@@ -31,19 +31,29 @@ export class ProductService {
     );
   }
 
+  // getImageByProductId(id: number): Observable<Image> {
+  //   const url = `${this.apiUrl}/admin/product/image/${id}`    
+  //   const headers = this.headerService.getHeaders()
+  //   return this.http.post(url,{},{headers} ).pipe(
+  //     map((response: any) => {
+  //       console.log(response);
+  //       return response;
+  //       // return this.mapApiResponseToProductList(response);
+  //     })
+  //   );
+  // }
+
 
   private mapApiResponseToProductList(apiResponse: ProductList): ProductList {
     return {
       totalRecords: apiResponse.totalRecords,
       data: apiResponse.data.map((product: any) => ({
         id: product.id,
+        total: product.total,
         name: product.name,
         description: product.description,
-        image: product.image ? product.image.map((img: any) => ({ name: img.name, content: img.content })) : [],
         rate: product.rate,
         material: product.material,
-        size: product.size ? product.size.map((s: any) => ({ size: s.size, quantity: s.quantity, sold: s.sold, remain: s.remain })) : [],
-        number: product.number,
       })),
     };
   }

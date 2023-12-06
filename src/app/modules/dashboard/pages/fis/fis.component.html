@@ -1,13 +1,27 @@
 <!-- Statistics Cards -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 p-4 gap-4">
   <app-category-management></app-category-management>
-  <app-product-management></app-product-management>
+  <app-product-summary></app-product-summary>
   <app-user-management></app-user-management>
 </div>
 <!-- Statistics Cards -->
   <!-- Recent Activities -->
   <!-- <app-category-show></app-category-show> -->
-  <app-product-list></app-product-list>
+  <div class="grid grid-cols-1 lg:grid-cols-2 p-4 gap-4">
+    <div class="p-6 mr-2 bg-gray-100 dark:bg-gray-800 sm:rounded-lg">
+      <div class="relative flex flex-col min-w-0 mb-4 lg:mb-0 break-words bg-gray-50 dark:bg-gray-800 w-full shadow-lg rounded">
+        <app-product-form></app-product-form>
+       
+      </div>
+    </div>
+    <div class="p-6 mr-2 bg-gray-100 dark:bg-gray-800 sm:rounded-lg">
+      <div class="relative flex flex-col min-w-0 mb-4 lg:mb-0 break-words bg-gray-50 dark:bg-gray-800 w-full shadow-lg rounded">
+        <app-product-list></app-product-list>
+       
+      </div>
+    </div>
+
+  </div>
   <!-- ./Recent Activities -->
 
 

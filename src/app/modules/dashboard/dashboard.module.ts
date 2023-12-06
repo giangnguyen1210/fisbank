@@ -8,7 +8,10 @@ import { UserManagementComponent } from './components/fis/user-management/user-m
 import { ProductManagementComponent } from './components/fis/product-management/product-management.component';
 import { CategoryManagementComponent } from './components/fis/category-management/category-management.component';
 import { CategoryShowComponent } from './pages/fis/category-show/category-show.component';
-import { ProductListComponent } from './pages/fis/product-list/product-list.component';
+import { ProductComponent } from '../product/product.component';
+import { ProductListComponent } from './components/fis/product-management/product-list/product-list.component';
+import { ProductFormComponent } from './components/fis/product-management/product-form/product-form.component';
+import { ProductSummaryComponent } from './components/fis/product-management/product-summary/product-summary.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +22,9 @@ import { ProductListComponent } from './pages/fis/product-list/product-list.comp
     CategoryManagementComponent,
     CategoryShowComponent,
     ProductListComponent,
+    ProductComponent,
+    ProductFormComponent,
+    ProductSummaryComponent
   ],
   imports: [
     CommonModule,

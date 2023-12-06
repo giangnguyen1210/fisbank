@@ -7,11 +7,9 @@ export interface Product{
     id: number;
     name: string;
     description: string;
-    image: Array<Image>;
     rate: string;
+    total: number;
     material: string;
-    size: Array<Size>;
-    // total: number;
 }
 
 export interface Image{
