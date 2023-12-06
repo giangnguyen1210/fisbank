@@ -1,7 +1,5 @@
 package com.fisbank.service.impl;
 import com.fisbank.common.CommonService;
-import com.fisbank.dto.request.UserRequest;
-import com.fisbank.dto.response.AuthResponse;
 import com.fisbank.dto.response.UserResponse;
 import com.fisbank.dto.response.base.BaseResponse;
 import com.fisbank.mapper.UserMapper;
@@ -10,10 +8,6 @@ import com.fisbank.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;

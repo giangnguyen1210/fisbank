@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fisbank.mapper.ImageMapper">
-
-
-    <insert id="insertImage" parameterType="com.fisbank.dto.response.Image">
-        INSERT INTO images (name, content, product_id)
-        VALUES (#{name}, #{content}, #{productId})
+    <insert id="insertImage" parameterType="com.fisbank.dto.model.Image">
+        INSERT INTO image (name, content, color_id)
+        VALUES (#{name}, #{content}, #{colorId})
     </insert>
-
-    <select id="getImagesByProductId" resultType="com.fisbank.dto.response.Image">
-        SELECT * FROM images WHERE product_id = #{productId}
-    </select>
 </mapper>

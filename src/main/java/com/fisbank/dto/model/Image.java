@@ -1,25 +1,25 @@
-package com.fisbank.dto.response;
+package com.fisbank.dto.model;
 
 public class Image {
-    private Long id;
+    private int id;
     private String name;
     private byte[] content;
 
-    private int productId;
+    private int colorId;
 
-    public int getProductId() {
-        return productId;
+    public int getColorId() {
+        return colorId;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setColorId(int colorId) {
+        this.colorId = colorId;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -39,5 +39,4 @@ public class Image {
         this.content = content;
     }
 
-    // getters and setters
 }

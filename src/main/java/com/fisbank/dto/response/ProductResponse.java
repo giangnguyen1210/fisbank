@@ -1,6 +1,6 @@
 package com.fisbank.dto.response;
 
-import org.springframework.web.multipart.MultipartFile;
+import com.fisbank.dto.model.Image;
 
 import java.util.Date;
 import java.util.List;
@@ -11,8 +11,32 @@ public class ProductResponse {
     private String description;
     private int categoryId;
     private int rate;
+    private int total;
+    private double price;
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    private String material;
+    private Date createdAt;
+    private Date updatedAt;
 
     private List<Image> images;
+
+    private List<ProductSize> sizes;
+
+    public List<ProductSize> getSizes() {
+        return sizes;
+    }
+
+    public void setSizes(List<ProductSize> sizes) {
+        this.sizes = sizes;
+    }
 
     public List<Image> getImages() {
         return images;
@@ -22,9 +46,23 @@ public class ProductResponse {
         this.images = images;
     }
 
-    private String material;
-    private Date createdAt;
-    private Date updatedAt;
+    private byte[] content;
+
+    public byte[] getContent() {
+        return content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
+    }
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
 
     public int getId() {
         return id;

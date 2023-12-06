@@ -3,29 +3,31 @@
 <mapper namespace="com.fisbank.mapper.ProductMapper">
 
 
-    <insert id="addNewProduct">
-        insert into
-            product(
-                    "id",
-                    "name",
-                    "description",
-                    "rate",
-                    "material",
-                    "category_id",
+<!--    <insert id="addNewProduct">-->
+<!--        insert into-->
+<!--            product(-->
+<!--                    "id",-->
+<!--                    "name",-->
+<!--                    "description",-->
+<!--                    "rate",-->
+<!--                    "material",-->
+<!--                    "category_id",-->
+<!--                    "price",-->
+<!--                    "created_at",-->
+<!--                    "updated_at")-->
+<!--        values(-->
+<!--               #{id},-->
+<!--               #{name},-->
+<!--               #{description},-->
+<!--               #{rate},-->
+<!--               #{material},-->
+<!--               #{categoryId},-->
+<!--               #{price},-->
+<!--               Now(),-->
+<!--               Now()-->
+<!--              )-->
+<!--    </insert>-->
 
-                    "created_at",
-                    "updated_at")
-        values(
-               #{id},
-               #{name},
-               #{description},
-               #{rate},
-               #{material},
-               #{categoryId},
-               Now(),
-               Now()
-              )
-    </insert>
     <select id="checkProductExist" resultType="java.lang.Integer">
         select count(*) from product where name=#{name} and id!=#{id}
     </select>
@@ -35,8 +37,62 @@
     <select id="totalProduct" resultType="java.lang.Integer">
         select count(*) from product
     </select>
-    <select id="getListProduct" resultType="com.fisbank.dto.response.ProductResponse">
-        select * from product where is_deleted=0
+    <insert id="insertSize" parameterType="com.fisbank.dto.response.ProductSize">
+        insert into product_size (size, quantity, sold, remain, product_id)
+        values (#{size},#{quantity}, #{sold}, #{remain}, #{productId})
+    </insert>
+
+    <insert id="insertImage" parameterType="com.fisbank.dto.model.Image">
+        INSERT INTO images (name, content, product_id)
+        VALUES (#{name}, #{content}, #{productId})
+    </insert>
+    <!--    <insert id="insertProductTotal" parameterType="int">-->
+<!--        insert into product (select sum(quantity) from product_size ps where product_id = #{productId})-->
+<!--    </insert>-->
+    <insert id="insertProductTotal">
+        UPDATE product
+        SET total = (
+            SELECT COALESCE(SUM(quantity), 0) FROM product_size WHERE product_id = #{productId}
+        )
+        WHERE id = #{productId}
+    </insert>
+    <insert id="insertProduct">
+        insert into
+            product(
+            "id",
+            "name",
+            "description",
+            "rate",
+            "material",
+            "category_id",
+            "price",
+            "created_at",
+            "updated_at")
+        values(
+                  #{id},
+                  #{name},
+                  #{description},
+                  #{rate},
+                  #{material},
+                  #{categoryId},
+                  #{price},
+                  Now(),
+                  Now()
+              )
+    </insert>
+
+
+    <select id="getListProduct" resultType="com.fisbank.dto.model.Product">
+        Select * from product
+
+
+
+    </select>
+    <select id="getProductTotalById" resultType="com.fisbank.dto.response.ProductSize">
+        select sum(quantity) from product_size ps where product_id = #{productId}
+    </select>
+    <select id="getListProductDetail" resultType="com.fisbank.dto.request.ProductRequest">
+
     </select>
 
 

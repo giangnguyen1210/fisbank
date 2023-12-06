@@ -1,24 +1,26 @@
 package com.fisbank.service.impl;
 
-import com.fisbank.dto.response.CategoryResponse;
-import com.fisbank.dto.response.Image;
+import com.fisbank.dto.model.Color;
+import com.fisbank.dto.model.Image;
+import com.fisbank.dto.model.Product;
+import com.fisbank.dto.model.Size;
 import com.fisbank.dto.response.ProductResponse;
+import com.fisbank.dto.response.ProductSize;
 import com.fisbank.dto.response.base.BaseResponse;
-import com.fisbank.mapper.CategoryMapper;
-import com.fisbank.mapper.ImageMapper;
-import com.fisbank.mapper.ProductMapper;
+import com.fisbank.mapper.*;
 import com.fisbank.service.ProductService;
 import com.google.common.base.Strings;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.util.Assert;
 
-import java.io.IOException;
 import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
     @Autowired
     private ProductMapper productMapper;
 
@@ -26,45 +28,96 @@ public class ProductServiceImpl implements ProductService {
     private CategoryMapper categoryMapper;
 
     @Autowired
+    private ColorMapper colorMapper;
+
+    @Autowired
     private ImageMapper imageMapper;
 
+    @Autowired
+    private SizeMapper sizeMapper;
+
+    private void validateProduct(Product product){
+        Assert.notNull(product, "Product must not be null");
+        Assert.notNull(product.getName(), "Product name must not be null");
+        Assert.notNull(product.getCategoryId(), "Product category is needed");
+        Assert.notNull(product.getDescription(), "Product description must not be null");
+        Assert.isTrue(product.getPrice()>0,"Product price must be greater than 0");
+
+//        List<Color> colors = product.getColors();
+//        Assert.notNull(colors, "Colors list must not be null");
+//        Assert.isTrue(!colors.isEmpty(), "Colors list must not be empty");
+//        for (Color color : colors) {
+//            validateColor(color);
+//        }
+    }
+
+    private void validateColor(Color color){
+        Assert.notNull(color, "Color must not be null");
+        Assert.notNull(color.getName(), "Color name must not be null");
+        List<Image> images = color.getImages();
+        Assert.notNull(images, "Images list must not be null");
+        for (Image image: images){
+            validateImage(image);
+        }
+        List<Size> sizes = color.getSize();
+        Assert.notNull(sizes, "Size list must not be null");
+        for(Size size: sizes){
+            validateSize(size);
+        }
+    }
+    private void validateImage(Image image){
+        Assert.notNull(image, "Image must not be null");
+        Assert.notNull(image.getName(), "Image name must not be null");
+        Assert.notNull(image.getContent(), "Image content must not be null");
+    }
+    private void validateSize(Size size){
+        Assert.notNull(size, "Size must not be null");
+        Assert.notNull(size.getSize(), "Size name must not be null");
+        Assert.notNull(size.getQuantity(), "Size quantity must not be null");
+        Assert.notNull(size.getPrice(), "Size price must not be null");
+    }
+
+
     @Override
-    public BaseResponse addNewProduct(ProductResponse productResponse)  {
+    public BaseResponse addNewProduct(Product product)  {
         BaseResponse baseResponse = new BaseResponse();
-        System.out.println(productResponse.getName());
+        validateProduct(product);
+        System.out.println(product.getName());
 
         int nextIdProduct = 0;
-
-        if(productResponse==null || Strings.isNullOrEmpty(productResponse.getName())){
-            baseResponse.setErrorDesc("Ten is required");
-            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            return baseResponse;
-        }
-
 
         if(productMapper.totalProduct()>0){
             int productId = productMapper.getNextIdProduct();
             nextIdProduct = productId +1;
         }
-        if(categoryMapper.getCategoryId(productResponse.getCategoryId())==0){
-            baseResponse.setErrorDesc("Category id khong ton tai");
+
+        product.setId(nextIdProduct);
+        if(categoryMapper.getCategoryId(product.getCategoryId())==0){
+            baseResponse.setErrorDesc("Phân loại không tồn tại");
             return baseResponse;
         }
-        productResponse.setId(nextIdProduct);
-        int b = productMapper.addNewProduct(productResponse);
-        if(productMapper.checkProductExist(productResponse)>0){
-            baseResponse.setErrorDesc("Product đã tồn tại");
-            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            return baseResponse;
-        }
-        if(productResponse.getImages()!=null && !productResponse.getImages().isEmpty()){
-            for (Image image : productResponse.getImages()) {
-                image.setProductId(productResponse.getId());
-                imageMapper.insertImage(image);
-            }
-        }
+
+
+        int b = productMapper.insertProduct(product);
+        System.out.println(product);
+//        for (Color color : product.getColors()) {
+//            color.setProductId(nextIdProduct);
+//            System.out.println(color);
+//            colorMapper.insertColor(color);
+//
+//            for (Image image : color.getImages()) {
+//                image.setColorId(image.getColorId());
+//                System.out.println(image.getColorId());
+//                imageMapper.insertImage(image);
+//            }
+//
+//            for (Size size : color.getSize()) {
+//                size.setColorId(size.getColorId());
+//                sizeMapper.insertSize(size);
+//            }
+//        }
         if(b!=0){
-            baseResponse.setData(productResponse);
+            baseResponse.setData(product);
             baseResponse.setErrorCode(HttpStatus.OK.name());
             baseResponse.setErrorDesc("Thêm mới thanh cong");
 //            baseResponse.setTotalRecords();
@@ -73,7 +126,6 @@ public class ProductServiceImpl implements ProductService {
             baseResponse.setErrorDesc("Thêm mới thất bại");
             return baseResponse;
         }
-
         return baseResponse;
     }
 
@@ -81,9 +133,14 @@ public class ProductServiceImpl implements ProductService {
     public BaseResponse getAllProduct(ProductResponse productResponse) {
         BaseResponse baseResponse = new BaseResponse();
         List<ProductResponse> list = productMapper.getListProduct(productResponse);
+        System.out.println(productMapper.getListProduct(productResponse));
+//        System.out.println(productImageMapper.getImageByProductId());
+//        list.add(productResponse);
         int totalUser = productMapper.totalProduct();
         baseResponse.setTotalRecords(totalUser);
         baseResponse.setData(list);
         return baseResponse;
     }
+
+
 }
