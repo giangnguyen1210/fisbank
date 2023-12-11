@@ -8,10 +8,12 @@ import { UserManagementComponent } from './components/fis/user-management/user-m
 import { ProductManagementComponent } from './components/fis/product-management/product-management.component';
 import { CategoryManagementComponent } from './components/fis/category-management/category-management.component';
 import { CategoryShowComponent } from './pages/fis/category-show/category-show.component';
-import { ProductComponent } from '../product/product.component';
+// import { ProductComponent } from '../product/product.component';
 import { ProductListComponent } from './components/fis/product-management/product-list/product-list.component';
 import { ProductFormComponent } from './components/fis/product-management/product-form/product-form.component';
 import { ProductSummaryComponent } from './components/fis/product-management/product-summary/product-summary.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ProductDetailComponent } from './components/fis/product-management/product-detail/product-detail.component';
 
 @NgModule({
   declarations: [
@@ -22,13 +24,14 @@ import { ProductSummaryComponent } from './components/fis/product-management/pro
     CategoryManagementComponent,
     CategoryShowComponent,
     ProductListComponent,
-    ProductComponent,
     ProductFormComponent,
-    ProductSummaryComponent
+    ProductSummaryComponent,
+    ProductDetailComponent
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
+    ReactiveFormsModule
   ],
 })
 export class DashboardModule {}

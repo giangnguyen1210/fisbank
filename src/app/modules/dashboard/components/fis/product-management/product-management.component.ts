@@ -13,7 +13,7 @@ export class ProductManagementComponent {
   total: number | undefined;
 
   ngOnInit(): void {
-    this.productService.getProductList().subscribe(
+    this.productService.getProducts().subscribe(
       (data) => {
         console.log('API Response:', data);
         this.total=data.totalRecords;

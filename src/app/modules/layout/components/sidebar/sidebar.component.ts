@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class SidebarComponent {
   constructor(private router: Router) {}
-  navigateToDashboard(){
-    this.router.navigate(['/dashboard/fis']);
+  navigateToDashboard(route: string){
+    this.router.navigate([route]);
   }
 }

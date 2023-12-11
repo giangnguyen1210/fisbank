@@ -12,7 +12,7 @@ export class CategoryManagementComponent {
   total: number | undefined;
 
   ngOnInit(): void {
-    this.categoryService.getCategoryList().subscribe(
+    this.categoryService.getTotalRecord().subscribe(
       (data) => {
         console.log('API Response:', data);
         this.total=data.totalRecords;
