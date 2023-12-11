@@ -1,7 +1,7 @@
 package com.fisbank.service.impl;
 
+import com.fisbank.dto.model.Category;
 import com.fisbank.dto.response.CategoryResponse;
-import com.fisbank.dto.response.UserResponse;
 import com.fisbank.dto.response.base.BaseResponse;
 import com.fisbank.mapper.CategoryMapper;
 import com.fisbank.service.CategoryService;
@@ -65,6 +65,14 @@ public class CategoryServiceImpl implements CategoryService {
         int totalUser = categoryMapper.totalCategory();
         baseResponse.setTotalRecords(totalUser);
         baseResponse.setData(list);
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse getCategoryById(String category) {
+        BaseResponse baseResponse = new BaseResponse();
+        Category category1 = categoryMapper.getCategoryName(category);
+        baseResponse.setData(category);
         return baseResponse;
     }
 }

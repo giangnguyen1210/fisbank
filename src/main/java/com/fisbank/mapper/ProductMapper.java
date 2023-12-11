@@ -2,9 +2,8 @@ package com.fisbank.mapper;
 
 import com.fisbank.dto.model.Product;
 import com.fisbank.dto.request.ProductRequest;
-import com.fisbank.dto.model.Image;
+import com.fisbank.dto.response.ProductDetailResponse;
 import com.fisbank.dto.response.ProductResponse;
-import com.fisbank.dto.response.ProductSize;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -12,22 +11,23 @@ import java.util.List;
 @Mapper
 public interface ProductMapper {
 
-    int insertProduct(Product product);
+    int insertProduct(ProductRequest productRequest);
 
-    int checkProductExist(ProductResponse productResponse);
+    int checkProductExist(ProductRequest productRequest);
+    List<ProductResponse> getListProduct(ProductRequest productRequest);
 
-    int getNextIdProduct();
+    List<ProductDetailResponse> getListProductDetail(ProductRequest productRequest);
+    ProductDetailResponse getItemDetail(ProductRequest productRequest);
 
-    List<ProductResponse> getListProduct(ProductResponse productResponse);
+    int updateProduct(ProductRequest productRequest);
 
-    List<ProductRequest> getListProductDetail(ProductResponse productResponse);
+    int updateProductDetail(ProductRequest productRequest);
 
     int totalProduct();
 
-    int insertSize(ProductSize productSize);
-    int insertImage(Image image);
+//    int getNextIdProduct();
+//    int getNextIdColor();
 
-    ProductSize getProductTotalById(ProductSize productSize);
 
-    int insertProductTotal(int productId);
+
 }

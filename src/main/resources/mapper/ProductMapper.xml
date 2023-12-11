@@ -1,99 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fisbank.mapper.ProductMapper">
+    <update id="updateProduct">
+        update product
+        set
+           price=#{price},
+           description=#{description},
+           material=#{material}
+        where product_id=#{productId}
+    </update>
+    <update id="updateProductDetail">
+        update product
+        set
+            discount=#{discount},
+            quantity=#{quantity},
+            sold=#{sold},
+            remain=#{remain},
+        where product_id=#{productId} and size_id=#{sizeId} and color_id=#{colorId}
 
-
-<!--    <insert id="addNewProduct">-->
-<!--        insert into-->
-<!--            product(-->
-<!--                    "id",-->
-<!--                    "name",-->
-<!--                    "description",-->
-<!--                    "rate",-->
-<!--                    "material",-->
-<!--                    "category_id",-->
-<!--                    "price",-->
-<!--                    "created_at",-->
-<!--                    "updated_at")-->
-<!--        values(-->
-<!--               #{id},-->
-<!--               #{name},-->
-<!--               #{description},-->
-<!--               #{rate},-->
-<!--               #{material},-->
-<!--               #{categoryId},-->
-<!--               #{price},-->
-<!--               Now(),-->
-<!--               Now()-->
-<!--              )-->
-<!--    </insert>-->
-
+    </update>
     <select id="checkProductExist" resultType="java.lang.Integer">
-        select count(*) from product where name=#{name} and id!=#{id}
-    </select>
-    <select id="getNextIdProduct" resultType="java.lang.Integer">
-        select * from product order by id desc limit 1
-    </select>
-    <select id="totalProduct" resultType="java.lang.Integer">
         select count(*) from product
+                        where name=#{name}
+                          and color_id=#{colorId}
+                          and category_id = #{categoryId}
+                          and size_id=#{sizeId}
     </select>
-    <insert id="insertSize" parameterType="com.fisbank.dto.response.ProductSize">
-        insert into product_size (size, quantity, sold, remain, product_id)
-        values (#{size},#{quantity}, #{sold}, #{remain}, #{productId})
-    </insert>
-
-    <insert id="insertImage" parameterType="com.fisbank.dto.model.Image">
-        INSERT INTO images (name, content, product_id)
-        VALUES (#{name}, #{content}, #{productId})
-    </insert>
-    <!--    <insert id="insertProductTotal" parameterType="int">-->
-<!--        insert into product (select sum(quantity) from product_size ps where product_id = #{productId})-->
-<!--    </insert>-->
-    <insert id="insertProductTotal">
-        UPDATE product
-        SET total = (
-            SELECT COALESCE(SUM(quantity), 0) FROM product_size WHERE product_id = #{productId}
-        )
-        WHERE id = #{productId}
-    </insert>
     <insert id="insertProduct">
-        insert into
-            product(
-            "id",
+        insert into product(
+            "product_id",
             "name",
             "description",
             "rate",
             "material",
             "category_id",
             "price",
+            "quantity",
+            "sold",
+            "remain",
+            "color_id",
+            "size_id",
+            "image",
             "created_at",
-            "updated_at")
+            "updated_at"
+        )
         values(
-                  #{id},
+                #{productId},
                   #{name},
                   #{description},
                   #{rate},
                   #{material},
                   #{categoryId},
                   #{price},
+                  #{quantity},
+                  0,
+                  #{quantity},
+                  #{colorId},
+                  #{sizeId},
+                  #{image},
                   Now(),
                   Now()
               )
     </insert>
+    <select id="getListProduct" resultType="com.fisbank.dto.response.ProductResponse">
+        Select product_id, name, description, sum(quantity) as quantity, SUM(sold) as sold, sum(remain) as remain, price, COUNT(*) AS totalRecords from product group by product_id, name, description, price
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
+        </if>
+    </select>
 
+    <select id="totalProduct" resultType="java.lang.Integer">
+        select count(*) from product
+    </select>
+    <select id="getListProductDetail" resultType="com.fisbank.dto.response.ProductDetailResponse">
 
-    <select id="getListProduct" resultType="com.fisbank.dto.model.Product">
-        Select * from product
-
-
+        SELECT p.product_id,p.name, p.price, p.description, p.rate, p.material, p.quantity , p.sold ,p.remain , c."name" as color , s.name as size, p.image, cg.name as category
+        FROM product p
+                 JOIN color c ON p.color_id = c.id
+                 join size s on p.size_id = s.id
+                join category cg on p.category_id = cg.id
+        WHERE p.name = #{name} or p.product_id = #{productId}
 
     </select>
-    <select id="getProductTotalById" resultType="com.fisbank.dto.response.ProductSize">
-        select sum(quantity) from product_size ps where product_id = #{productId}
+    <select id="getItemDetail" resultType="com.fisbank.dto.response.ProductDetailResponse">
+        SELECT p.product_id,p.name, p.price, p.description, p.rate, p.material, p.quantity , p.sold ,p.remain , c."name" as color , s.name as size, p.image, cg.name as category
+        FROM product p
+            JOIN color c ON p.color_id = c.id
+            join size s on p.size_id = s.id
+            join category cg on p.category_id = cg.id
+        WHERE p.product_id = #{productId} and p.color_id=#{colorId} and p.size_id = #{sizeId}
+        limit 1
     </select>
-    <select id="getListProductDetail" resultType="com.fisbank.dto.request.ProductRequest">
 
-    </select>
+    <!--    <select id="getNextIdProduct" resultType="java.lang.Integer">-->
+<!--        select * from product order by id desc limit 1-->
+<!--    </select>-->
+<!--    <select id="getNextIdColor" resultType="java.lang.Integer">-->
+<!--        select * from product_color order by id desc  limit 1-->
+<!--    </select>-->
 
 
 </mapper>

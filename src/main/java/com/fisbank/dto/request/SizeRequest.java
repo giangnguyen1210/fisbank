@@ -1,9 +1,9 @@
-package com.fisbank.dto.model;
+package com.fisbank.dto.request;
 
 import lombok.Data;
 
 @Data
-public class Category {
+public class SizeRequest {
     private int id;
     private String name;
 }

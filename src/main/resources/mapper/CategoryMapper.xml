@@ -30,4 +30,10 @@
     <select id="getListCategory" resultType="com.fisbank.dto.response.CategoryResponse">
         select * from category
     </select>
+    <select id="getCategoryName" parameterType="com.fisbank.dto.model.Category" resultType="com.fisbank.dto.model.Category">
+        select * from category where name=#{name}
+    </select>
+    <select id="getCategoryIdByName" resultType="java.lang.Integer">
+        select id from category where name=#{name}
+    </select>
 </mapper>

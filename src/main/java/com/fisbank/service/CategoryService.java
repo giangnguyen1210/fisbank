@@ -9,5 +9,7 @@ public interface CategoryService {
 
     BaseResponse getAllCategory(CategoryResponse categoryResponse);
 
+    BaseResponse getCategoryById(String category);
+
 //    BaseResponse getCurrentId();
 }

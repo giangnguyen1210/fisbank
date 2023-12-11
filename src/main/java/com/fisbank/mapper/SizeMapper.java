@@ -1,9 +1,17 @@
 package com.fisbank.mapper;
 
-import com.fisbank.dto.model.Size;
+import com.fisbank.dto.request.ColorRequest;
+import com.fisbank.dto.request.SizeRequest;
+import com.fisbank.dto.response.SizeResponse;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface SizeMapper {
-    void insertSize(Size size);
+    int addNewSize(SizeRequest sizeRequest);
+
+    int checkSizeNameExist(SizeRequest sizeRequest);
+
+    List<SizeResponse> getListSize(SizeRequest sizeRequest);
 }

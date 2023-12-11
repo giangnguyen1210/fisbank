@@ -1,5 +1,6 @@
 package com.fisbank.mapper;
 
+import com.fisbank.dto.model.Category;
 import com.fisbank.dto.response.CategoryResponse;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -16,6 +17,9 @@ public interface CategoryMapper {
     int updateCategory(CategoryResponse categoryResponse);
 
     int getCategoryId(int id);
-
+    Category getCategoryName(String category);
     List<CategoryResponse> getListCategory(CategoryResponse categoryResponse);
+
+    int getCategoryIdByName(String name);
+
 }

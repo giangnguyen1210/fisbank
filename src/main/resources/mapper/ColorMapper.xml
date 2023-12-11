@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fisbank.mapper.ColorMapper">
-    <insert id="insertColor" parameterType="com.fisbank.dto.model.Color">
-        INSERT INTO product_color (name, product_id)
-        VALUES (#{name}, #{productId})
+
+    <insert id="addNewColor">
+        insert into color(name) values (#{name})
     </insert>
+    <select id="checkColorNameExist" resultType="java.lang.Integer">
+        select count(*) from color where name=#{name} and id!= #{id}
+    </select>
+    <select id="getListColor" resultType="com.fisbank.dto.response.ColorResponse">
+        select * from color
+    </select>
 
 </mapper>
