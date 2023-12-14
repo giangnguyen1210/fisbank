@@ -46,13 +46,15 @@ export interface ProductDetail{
     description: string;
     rate: number;
     material: string;
-    category: number;
+    categoryId: number;
     price: GLfloat;
     quantity: number;
     sold: number;
     remain: number;
-    color: number;
-    size: number;
+    color: string;
+    size: string;
+    sizeId: number;
+    colorId: number;
     image: string;
     discount: number;
 }

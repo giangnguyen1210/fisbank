@@ -11,6 +11,12 @@ const routes: Routes = [
     canActivate: [AuthGuard], // Apply the AuthGuard to the entire dashboard module
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  {
+    path: 'product',
+    component: LayoutComponent,
+    // loadChildren: () => import('../product')
+
+  }
   // { path: '**', redirectTo: 'error/404' },
 ];
 

@@ -40,6 +40,7 @@ export class AuthService {
     const loginUrl = `${this.apiUrl}/auth/login`; 
     return this.http.post(loginUrl, user).pipe(
       map((response) => {
+        // console.log(response);
         return response;
       }),
       catchError((error) => {
@@ -52,6 +53,15 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     this.router.navigate(['/auth/sign-in']);
+  }
+
+  userDetail(): Observable<any>{
+    const url = `${this.apiUrl}/auth/user-detail`;
+    return this.http.post(url, {}).pipe(
+      map((response)=>{
+        return response;
+      })
+    )
   }
   
 

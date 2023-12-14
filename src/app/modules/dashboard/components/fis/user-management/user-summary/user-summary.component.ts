@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
-  selector: 'app-user-management',
-  templateUrl: './user-management.component.html',
-  styleUrls: ['./user-management.component.scss']
+  selector: 'app-user-summary',
+  templateUrl: './user-summary.component.html',
+  styleUrls: ['./user-summary.component.scss']
 })
-export class UserManagementComponent implements OnInit {
-  constructor(private userService: UserService) {}
+export class UserSummaryComponent implements OnInit {
+  constructor(private userService: UserService, private router: Router) {}
 
   total: number | undefined;
 
@@ -16,11 +17,14 @@ export class UserManagementComponent implements OnInit {
       (data) => {
         console.log('API Response:', data);
         this.total=data.totalRecords;
-        // console.log(this.total);
+        console.log(this.total);
       },
       (error) => {
         console.error('API Error:', error);
       }
     );
+  }
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
   }
 }

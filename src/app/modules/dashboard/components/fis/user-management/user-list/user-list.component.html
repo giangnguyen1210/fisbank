@@ -1,0 +1,148 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="p-4">
+                    <div class="flex items-center">
+                        <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                    </div>
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Email
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Role
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Status
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of userList.data "  class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <ng-container *ngIf="!(editing && userDetail.id==user.id); else edit">
+                    <td class="w-4 p-4">
+                        <div class="flex items-center">
+                            <input id="checkbox-table-search-{{ user.name }}" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="checkbox-table-search-{{ user.name }}" class="sr-only">checkbox</label>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ user.avatar }}
+                    </td>
+                    <td  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ user.name }}
+                    </td>
+                   
+                    <td class="px-6 py-4">
+                        {{ user.email }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ user.roleName }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ user.statusName }}
+                    </td>
+                    
+                    <td class="px-6 py-4">
+                        <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded-md w-20" (click)="editUser(user)">Edit</button>
+                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md w-20" (click)="delete(user)">Delete</button>
+                    </td>
+                    <div *ngIf="showModal" class="fixed inset-0 bg-gray-500 bg-opacity-30 flex items-center justify-center">
+                        <div class="bg-white p-8 rounded shadow-md">
+                          <div class="text-xl mb-4">Confirm Deletion</div>
+                          <div>Are you sure you want to delete {{selectedUser.name}}, {{selectedUser.id}}</div>
+                          <div class="mt-4 flex justify-end">
+                            <button class="bg-gray-300 px-4 py-2 mr-2" (click)="cancelDelete()">Cancel</button>
+                            <button class="bg-red-500 text-white px-4 py-2" (click)="confirmDelete(user)">Delete</button>
+                          </div>
+                        </div>
+                      </div>
+                    
+                </ng-container>
+                
+                <ng-template #edit>
+                    <ng-container [formGroup]="userForm">
+                        <td class="w-4 p-4">
+                            <div class="flex items-center">
+                                <input id="checkbox-table-search-{{ user.name }}" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="checkbox-table-search-{{ user.name }}" class="sr-only">checkbox</label>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ user.avatar }}
+                        </td>
+                        <td  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{ user.name }}
+                        </td>
+                       
+                        <td class="px-6 py-4">
+                            {{ user.email }}
+                            
+                        </td>
+                        <td class="px-6 py-4">
+                              <select formControlName="role">
+                                <option *ngFor="let ro of roles" [value]="ro.id">{{ ro.name }}</option>
+                            </select>
+                                <!-- <input formControlName="role" class="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500" type="text" value="{{user.role}}"/> -->
+                        </td>
+                        <td class="px-6 py-4">
+                            <select formControlName="status">
+                                <option *ngFor="let st of status" [value]="st.id">{{ st.name }}</option>
+                              </select>
+                            <!-- <input formControlName="status" class="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500" type="text" value="{{user.status}}"/> -->
+                        </td>
+                        
+                        <td class="px-6 py-4">
+                            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md w-20" (click)="update(user)">Update</button>
+                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md w-20" (click)="cancel()">Cancel</button>
+                        </td>
+
+                    </ng-container>
+                    
+                </ng-template>
+                
+                
+                
+               
+              
+            </tr>
+        </tbody>
+    </table>
+    <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
+        <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Showing <span class="font-semibold text-gray-900 dark:text-white">1-10</span> of <span class="font-semibold text-gray-900 dark:text-white">1000</span></span>
+        <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+            <li>
+                <a href="#" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
+            </li>
+            <li>
+        <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>

@@ -36,15 +36,16 @@ export class ProductService {
     );
   }
 
-  getItemDetail(productId: any): Observable<ProductDetail[]> {
-    const headers = this.headerService.getHeaders()
-    return this.http.post(`${this.apiUrl}/admin/product/item-detail`, {productId},{headers}).pipe(
-      map((response: any) => {
-        return response.data;
-      })
-    );
-  }
+  // getItemDetail(productId: any): Observable<ProductDetail[]> {
+  //   const headers = this.headerService.getHeaders()
+  //   return this.http.post(`${this.apiUrl}/admin/product/item-detail`, {productId},{headers}).pipe(
+  //     map((response: any) => {
+  //       return response.data;
+  //     })
+  //   );
+  // }
 
+  
   
 
   getListColor(): Observable<any> {

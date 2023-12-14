@@ -1,5 +1,3 @@
-
-
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -25,20 +23,20 @@
                 <th scope="col" class="px-6 py-3">
                     Remain
                 </th>
-                <!-- <th scope="col" class="px-6 py-3">
+                <th scope="col" class="px-6 py-3">
                     Action
-                </th> -->
+                </th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let product of productList.data"   (click)="navigateTo('dashboard/product/product-detail/'+product.productId)"  class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <tr *ngFor="let product of productList.data"  class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <td class="w-4 p-4">
                     <div class="flex items-center">
                         <input id="checkbox-table-search-{{ product.name }}" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                         <label for="checkbox-table-search-{{ product.name }}" class="sr-only">checkbox</label>
                     </div>
                 </td>
-                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <td  (click)="navigateTo('dashboard/product/product-detail/'+product.productId)"   class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     {{ product.name }}
                 </td>
                
@@ -54,10 +52,23 @@
                 <td class="px-6 py-4">
                     {{ product.remain }}
                 </td>
-                <!-- <td class="px-6 py-4">
-                    <span href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</span> |
-                    <span href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline">Delete</span>
-                </td> -->
+                <td class="px-6 py-4">
+                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md w-20" (click)="openDeleteModal(product.productId)">Delete</button>
+                    
+                    
+                </td>
+
+                <div *ngIf="showModal" class="fixed inset-0 bg-gray-500 bg-opacity-20 flex items-center justify-center">
+                    <div class="bg-white p-8 rounded shadow-md">
+                      <div class="text-xl mb-4">Confirm Deletion</div>
+                      <div>Are you sure you want to delete {{selectedProduct.name}}</div>
+                      <div class="mt-4 flex justify-end">
+                        <button class="bg-gray-300 px-4 py-2 mr-2" (click)="cancelDelete()">Cancel</button>
+                        <button class="bg-red-500 text-white px-4 py-2" (click)="confirmDelete(product.productId)">Delete</button>
+                      </div>
+                    </div>
+                </div>
+              
             </tr>
         </tbody>
     </table>

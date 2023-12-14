@@ -31,4 +31,14 @@ export class ProductRequestService {
     const url = `${this.apiUrl}/admin/product/edit-detail`;
     return this.http.post(url, product, { headers });
   }
+  deleteProduct(product: ProductRequest): Observable<any>{
+    const headers = this.headerService.getHeaders();
+    const url = `${this.apiUrl}/admin/product/delete`;
+    return this.http.post(url, product, { headers });
+  }
+  deleteProductDetail(product: ProductRequest): Observable<any>{
+    const headers = this.headerService.getHeaders();
+    const url = `${this.apiUrl}/admin/product/delete-detail`;
+    return this.http.post(url, product, { headers });
+  }
 }

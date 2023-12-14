@@ -59,6 +59,7 @@ export class SignInComponent {
         (response) => {
           this.authService.setJwtToken(response.accessToken);
           if(this.authService.isLoggedIn()){
+            console.log(response.data);
             this._router.navigate(['/dashboard'])
           }
           // console.log(response.accessToken);

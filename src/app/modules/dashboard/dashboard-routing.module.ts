@@ -6,6 +6,7 @@ import { AuthGuard } from 'src/app/core/guards/auth.guard';
 import { ProductFormComponent } from './components/fis/product-management/product-form/product-form.component';
 import { ProductManagementComponent } from './components/fis/product-management/product-management.component';
 import { ProductDetailComponent } from './components/fis/product-management/product-detail/product-detail.component';
+import { UserManagementComponent } from './components/fis/user-management/user-management.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,7 @@ const routes: Routes = [
       { path: 'fis', component: FisComponent },
       {path: 'product', component: ProductManagementComponent},
       { path: 'product/product-detail/:productId', component: ProductDetailComponent },
+      {path: 'user', component: UserManagementComponent},
 
     ],
     

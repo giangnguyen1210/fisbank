@@ -14,6 +14,10 @@ import { ProductFormComponent } from './components/fis/product-management/produc
 import { ProductSummaryComponent } from './components/fis/product-management/product-summary/product-summary.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProductDetailComponent } from './components/fis/product-management/product-detail/product-detail.component';
+import { UserListComponent } from './components/fis/user-management/user-list/user-list.component';
+import { UserSummaryComponent } from './components/fis/user-management/user-summary/user-summary.component';
+import { UserFormComponent } from './components/fis/user-management/user-form/user-form.component';
+import { UserDetailComponent } from './components/fis/user-management/user-detail/user-detail.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +30,11 @@ import { ProductDetailComponent } from './components/fis/product-management/prod
     ProductListComponent,
     ProductFormComponent,
     ProductSummaryComponent,
-    ProductDetailComponent
+    ProductDetailComponent,
+    UserListComponent,
+    UserSummaryComponent,
+    UserFormComponent,
+    UserDetailComponent,
   ],
   imports: [
     CommonModule,

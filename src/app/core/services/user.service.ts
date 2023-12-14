@@ -18,4 +18,17 @@ export class UserService {
     const headers = this.headerService.getHeaders()
     return this.http.post(url, {},{ headers });
   }
+
+  getListRole(): Observable<any>{
+    const url = `${this.apiUrl}/admin/common/list-role`;
+    const headers = this.headerService.getHeaders()
+    return this.http.post(url, {},{ headers });
+  }
+
+  getListStatus(): Observable<any>{
+    const url = `${this.apiUrl}/admin/common/list-status`;
+    const headers = this.headerService.getHeaders()
+    return this.http.post(url, {},{ headers });
+  }
+
 }

@@ -11,6 +11,7 @@ import { ProductRequestService } from 'src/app/core/services/request/product-req
   styleUrls: ['./product-form.component.scss']
 })
 export class ProductFormComponent implements OnInit{
+  // @Input listProduct: any
   form: any;
   isSubmit = false;
   nameImage: any;
@@ -18,6 +19,7 @@ export class ProductFormComponent implements OnInit{
   productForm!: any;
   colorForm!: FormGroup;
   sizeForm!: FormGroup;
+  listProduct: any;
   
   categories: Category[] = [];
   colors: Color[] = [];
