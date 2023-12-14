@@ -15,9 +15,22 @@
             discount=#{discount},
             quantity=#{quantity},
             sold=#{sold},
-            remain=#{remain},
+            remain=#{quantity}-#{sold}
         where product_id=#{productId} and size_id=#{sizeId} and color_id=#{colorId}
 
+    </update>
+    <update id="deleteProduct">
+        update product
+        set
+            status=1
+        where product_id=#{productId}
+    </update>
+
+    <update id="deleteProductDetail">
+        update product
+        set
+            status=1
+        where product_id=#{productId} and size_id=#{sizeId} and color_id=#{colorId}
     </update>
     <select id="checkProductExist" resultType="java.lang.Integer">
         select count(*) from product
@@ -41,6 +54,7 @@
             "color_id",
             "size_id",
             "image",
+            "discount",
             "created_at",
             "updated_at"
         )
@@ -58,28 +72,26 @@
                   #{colorId},
                   #{sizeId},
                   #{image},
+                    0,
                   Now(),
                   Now()
               )
     </insert>
     <select id="getListProduct" resultType="com.fisbank.dto.response.ProductResponse">
-        Select product_id, name, description, sum(quantity) as quantity, SUM(sold) as sold, sum(remain) as remain, price, COUNT(*) AS totalRecords from product group by product_id, name, description, price
-        <if test="limit > 0">
-            OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
-        </if>
+        Select product_id, name, description, sum(quantity) as quantity, SUM(sold) as sold, sum(remain) as remain, price, COUNT(*) AS totalRecords from product where status=0 group by product_id, name, description, price
     </select>
 
     <select id="totalProduct" resultType="java.lang.Integer">
-        select count(*) from product
+        select count(*) from product where status=0
     </select>
     <select id="getListProductDetail" resultType="com.fisbank.dto.response.ProductDetailResponse">
 
-        SELECT p.product_id,p.name, p.price, p.description, p.rate, p.material, p.quantity , p.sold ,p.remain , c."name" as color , s.name as size, p.image, cg.name as category
+        SELECT p.product_id,p.name, p.color_id, p.size_id, p.price, p.description, p.rate, p.material, p.quantity , p.sold ,p.remain, p.discount , c."name" as color , s.name as size, p.image, cg.name as category
         FROM product p
                  JOIN color c ON p.color_id = c.id
                  join size s on p.size_id = s.id
                 join category cg on p.category_id = cg.id
-        WHERE p.name = #{name} or p.product_id = #{productId}
+        WHERE (p.name = #{name} or p.product_id = #{productId}) and status!=1
 
     </select>
     <select id="getItemDetail" resultType="com.fisbank.dto.response.ProductDetailResponse">

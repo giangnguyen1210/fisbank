@@ -25,8 +25,8 @@ public interface ProductMapper {
 
     int totalProduct();
 
-//    int getNextIdProduct();
-//    int getNextIdColor();
+    int deleteProduct(ProductRequest productRequest);
+    int deleteProductDetail(ProductRequest productRequest);
 
 
 

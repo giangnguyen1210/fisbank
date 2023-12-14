@@ -49,6 +49,16 @@ public class ProductController {
         return new ResponseEntity<>(productService.editProductDetail(productRequest), HttpStatus.OK);
     }
 
+    @PostMapping("/delete")
+    public ResponseEntity<BaseResponse> deleteProduct(@RequestBody ProductRequest productRequest){
+        return new ResponseEntity<>(productService.deleteProduct(productRequest), HttpStatus.OK);
+    }
+
+    @PostMapping("/delete-detail")
+    public ResponseEntity<BaseResponse> deleteProductDetail(@RequestBody ProductRequest productRequest){
+        return new ResponseEntity<>(productService.deleteProductDetail(productRequest), HttpStatus.OK);
+    }
+
     // color controller
     @PostMapping(value="/color/add",consumes = "application/json")
     public ResponseEntity<BaseResponse> addNewColor(@RequestBody ColorRequest colorRequest) {

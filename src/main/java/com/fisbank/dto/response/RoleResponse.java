@@ -3,7 +3,7 @@ package com.fisbank.dto.response;
 import lombok.Data;
 
 @Data
-public class ColorResponse {
+public class RoleResponse {
     private int id;
     private String name;
 }

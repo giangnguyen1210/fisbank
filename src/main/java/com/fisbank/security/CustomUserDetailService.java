@@ -15,10 +15,10 @@ public class CustomUserDetailService implements UserDetailsService {
     private UserMapper userMapper;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserResponse user = userMapper.findByUsername(username);
+        UserResponse user = userMapper.findByEmail(username);
         return User.builder()
                 .username(user.getEmail())
                 .password(user.getPassword())
-                .roles(user.getRoleId()).build();
+                .roles(String.valueOf(user.getRole())).build();
     }
 }

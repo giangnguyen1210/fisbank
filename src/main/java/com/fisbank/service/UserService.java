@@ -12,6 +12,8 @@ public interface UserService {
 
     BaseResponse editUser(UserResponse response);
 
-    BaseResponse deleteUser(String id);
+    BaseResponse deleteUser(UserRequest request);
+
+    BaseResponse userDetail(String email);
 
 }

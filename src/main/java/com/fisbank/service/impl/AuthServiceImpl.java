@@ -7,6 +7,7 @@ import com.fisbank.dto.response.base.BaseResponse;
 import com.fisbank.mapper.UserMapper;
 import com.fisbank.security.JwtGenerator;
 import com.fisbank.service.AuthService;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,7 +37,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse login(UserResponse response) {
 
-        UserResponse user = userMapper.findByUsername(response.getEmail());
+        UserResponse user = userMapper.findByEmail(response.getEmail());
         AuthResponse authResponse = new AuthResponse("");
         if(response.getEmail()==null || response.getPassword()==null){
             authResponse.setErrorCode("Email or password is empty");
@@ -48,8 +49,12 @@ public class AuthServiceImpl implements AuthService {
                 System.out.printf(authentication.getName());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 String token = jwtGenerator.generateToken(authentication);
+                Claims claims = JwtGenerator.getEmailFromJwt(token);
+
+                // Lấy thông tin người dùng
+                String username = claims.getSubject();
                 authResponse.setAccessToken(token);
-                authResponse.setData("Login thanh cong");
+                authResponse.setData(username);
             }else{
                 authResponse.setErrorCode("Mat khau khong trung khop");
             }
@@ -62,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
         BaseResponse baseResponse = new BaseResponse();
         String hashedPassword = passwordEncoder.encode(request.getPassword());
         request.setPassword(hashedPassword);
-        request.setRoleId("1");
+        request.setRole(1);
         if (request.getName() != null && request.getEmail() != null
         ) {
             String id = "FISBANK-";

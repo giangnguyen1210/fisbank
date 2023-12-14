@@ -15,6 +15,8 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @Autowired UserService userService;
+
     @PostMapping("/create")
     public ResponseEntity<BaseResponse> createUser(@RequestBody UserResponse response){
         return new ResponseEntity<>(authService.register(response), HttpStatus.OK);
@@ -24,4 +26,10 @@ public class AuthController {
     public ResponseEntity<BaseResponse> login(@RequestBody UserResponse response){
         return new ResponseEntity<>(authService.login(response), HttpStatus.OK);
     }
+
+    @PostMapping("/user-detail")
+    public ResponseEntity<BaseResponse> userDetail(@RequestBody UserResponse response){
+        return new ResponseEntity<>(userService.userDetail(response.getEmail()), HttpStatus.OK);
+    }
+
 }

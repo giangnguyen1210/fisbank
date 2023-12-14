@@ -12,7 +12,7 @@ public interface UserMapper {
 
     String getNextId();
 
-    UserResponse findByUsername(String email);
+    UserResponse findByEmail(String email);
     int totalUser();
     List<UserResponse> getListUser(UserResponse response);
 
@@ -20,6 +20,7 @@ public interface UserMapper {
     int delete(String id);
     int countIdUser(UserResponse response);
     int isUserDeleted(String id);
+
 
 
 }

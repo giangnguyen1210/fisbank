@@ -1,13 +1,17 @@
 package com.fisbank.service.impl;
 import com.fisbank.common.CommonService;
+import com.fisbank.dto.request.UserRequest;
+import com.fisbank.dto.response.RoleResponse;
 import com.fisbank.dto.response.UserResponse;
 import com.fisbank.dto.response.base.BaseResponse;
+import com.fisbank.mapper.RoleMapper;
 import com.fisbank.mapper.UserMapper;
 import com.fisbank.security.JwtGenerator;
 import com.fisbank.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;
@@ -18,6 +22,9 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private RoleMapper roleMapper;
 
     @Autowired
     private CommonService service;
@@ -35,7 +42,6 @@ public class UserServiceImpl implements UserService {
         BaseResponse baseResponse = new BaseResponse();
         String hashedPassword = passwordEncoder.encode(request.getPassword());
         request.setPassword(hashedPassword);
-        request.setRoleId("1");
         if (request.getName() != null && request.getEmail() != null
         ) {
             String id = "FISBANK-";
@@ -87,8 +93,7 @@ public class UserServiceImpl implements UserService {
     public BaseResponse getListUser(UserResponse request) {
         BaseResponse baseResponse = new BaseResponse();
         List<UserResponse> list = userMapper.getListUser(request);
-        int totalUser = userMapper.totalUser();
-        baseResponse.setTotalRecords(totalUser);
+        baseResponse.setTotalRecords(list.size());
         baseResponse.setData(list);
         return baseResponse;
     }
@@ -103,13 +108,13 @@ public class UserServiceImpl implements UserService {
             return new BaseResponse(String.valueOf(HttpStatus.BAD_REQUEST.value()),
                     "Fields is required");
         }
-        if(userMapper.checkEmailExist(request.getEmail())>0){
-            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc(
-                    "email đã tồn tại"
-            );
-            return baseResponse;
-        }
+//        if(userMapper.checkEmailExist(request.getEmail())>0){
+//            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
+//            baseResponse.setErrorDesc(
+//                    "email đã tồn tại"
+//            );
+//            return baseResponse;
+//        }
         int b = userMapper.editUser(request);
         if (b !=0) {
             baseResponse.setData(request);
@@ -126,19 +131,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public BaseResponse deleteUser(String id) {
+    public BaseResponse deleteUser(UserRequest request) {
         BaseResponse baseResponse = new BaseResponse();
-        if (id != null && !id.isEmpty()) {
-            int rs = userMapper.delete(id);
+        List<UserResponse> userResponses = userMapper.getListUser(request);
+        if (request.getId() != null && !request.getId().isEmpty()) {
+            int rs = userMapper.delete(request.getId());
             if (rs > 0) {
                 baseResponse.setData(rs);
+                baseResponse.setTotalRecords(userResponses.size());
                 baseResponse.setErrorCode(HttpStatus.OK.name());
                 baseResponse.setErrorDesc(
-                        "Delete Bank success");
+                        "Delete user success");
             } else {
                 baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
                 baseResponse.setErrorDesc(
-                        "Delete Bank failed");
+                        "Delete user failed");
                 return baseResponse;
             }
         } else {
@@ -148,6 +155,13 @@ public class UserServiceImpl implements UserService {
         return baseResponse;
     }
 
+    @Override
+    public BaseResponse userDetail(String email) {
+        BaseResponse baseResponse = new BaseResponse();
+        UserResponse user = userMapper.findByEmail(email);
+        baseResponse.setData(user);
+        return baseResponse;
+    }
 
 
 

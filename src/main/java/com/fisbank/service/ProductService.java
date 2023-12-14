@@ -16,6 +16,9 @@ public interface ProductService {
     BaseResponse editProduct(ProductRequest productRequest);
     BaseResponse editProductDetail(ProductRequest productRequest);
 
+    BaseResponse deleteProduct(ProductRequest productRequest);
+    BaseResponse deleteProductDetail(ProductRequest productRequest);
+
     BaseResponse addNewColor(ColorRequest colorRequest);
 
 

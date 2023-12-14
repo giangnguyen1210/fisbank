@@ -13,9 +13,12 @@ public class ProductDetailResponse {
     private int quantity;
     private int sold;
     private int remain;
+    private int discount;
     private double price;
     private String image;
     private String size;
     private String color;
+    private int colorId;
+    private int sizeId;
     private int totalRecords;
 }

@@ -68,13 +68,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public BaseResponse getAllProduct(ProductRequest productRequest) {
         BaseResponse baseResponse = new BaseResponse();
-        List<ProductResponse> productRequests = productMapper.getListProduct(productRequest);
-        if(productMapper.checkProductExist(productRequest)>0){
-            baseResponse.setErrorDesc("Product is Exist");
-            return baseResponse;
-        }
-        baseResponse.setData(productRequests);
-        baseResponse.setTotalRecords(productRequests.size());
+        List<ProductResponse> productResponses = productMapper.getListProduct(productRequest);
+//        if(productMapper.checkProductExist(productRequest)>0){
+//            baseResponse.setErrorDesc("Product is Exist");
+//            return baseResponse;
+//        }
+        baseResponse.setData(productResponses);
+        baseResponse.setTotalRecords(productResponses.size());
 
         return baseResponse;
     }
@@ -113,6 +113,43 @@ public class ProductServiceImpl implements ProductService {
     public BaseResponse editProductDetail(ProductRequest productRequest) {
         BaseResponse baseResponse = new BaseResponse();
         int update = productMapper.updateProductDetail(productRequest);
+        if (update==1){
+            baseResponse.setData("update data success");
+        }
+        else {
+            baseResponse.setData("update fail");
+        }
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse deleteProduct(ProductRequest productRequest){
+        BaseResponse baseResponse = new BaseResponse();
+        int delete = productMapper.deleteProduct(productRequest);
+        List<ProductResponse> productResponses = productMapper.getListProduct(productRequest);
+        if (delete==1){
+            baseResponse.setTotalRecords(productResponses.size());
+            baseResponse.setData("delete data success");
+        }
+        else {
+            baseResponse.setData("delete fail");
+        }
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse deleteProductDetail(ProductRequest productRequest){
+        BaseResponse baseResponse = new BaseResponse();
+        int delete = productMapper.deleteProductDetail(productRequest);
+        List<ProductDetailResponse> productResponses = productMapper.getListProductDetail(productRequest);
+        if (delete==1){
+            baseResponse.setTotalRecords(productResponses.size());
+
+            baseResponse.setData("delete data success");
+        }
+        else {
+            baseResponse.setData("delete fail");
+        }
         return baseResponse;
     }
     // color service

@@ -26,12 +26,12 @@ public class JwtGenerator {
         return token;
     }
 
-    public String getEmailFromJwt(String token){
+    public static Claims getEmailFromJwt(String token){
         Claims claims = Jwts.parser()
                 .setSigningKey(key)
                 .parseClaimsJws(token)
                 .getBody();
-        return claims.getSubject();
+        return claims;
     }
 
     public boolean validateToken(String token){

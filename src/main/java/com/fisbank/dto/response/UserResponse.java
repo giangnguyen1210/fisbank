@@ -9,6 +9,9 @@ public class UserResponse {
     private String password;
     private String email;
     private String avatar;
-    private String roleId;
+    private int role;
+    private String roleName;
+    private int status;
+    private String statusName;
     private int isDeleted;
 }
