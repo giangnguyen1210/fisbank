@@ -73,6 +73,7 @@ public class UserServiceImpl implements UserService {
                 baseResponse.setData(request);
 //                baseResponse.setCreator();
                 baseResponse.setErrorCode(HttpStatus.OK.name());
+
                 baseResponse.setTotalRecords(userMapper.totalUser());
                 baseResponse.setErrorDesc("Thêm mới thành công");
             } else {
@@ -133,9 +134,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public BaseResponse deleteUser(UserRequest request) {
         BaseResponse baseResponse = new BaseResponse();
-        List<UserResponse> userResponses = userMapper.getListUser(request);
         if (request.getId() != null && !request.getId().isEmpty()) {
             int rs = userMapper.delete(request.getId());
+            List<UserResponse> userResponses = userMapper.getListUser(request);
             if (rs > 0) {
                 baseResponse.setData(rs);
                 baseResponse.setTotalRecords(userResponses.size());

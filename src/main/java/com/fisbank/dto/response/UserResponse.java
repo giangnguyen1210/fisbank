@@ -9,7 +9,7 @@ public class UserResponse {
     private String password;
     private String email;
     private String avatar;
-    private int role;
+    private int roleId;
     private String roleName;
     private int status;
     private String statusName;

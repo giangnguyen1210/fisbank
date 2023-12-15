@@ -6,10 +6,13 @@ import com.fisbank.dto.request.SizeRequest;
 import com.fisbank.dto.response.ProductResponse;
 import com.fisbank.dto.response.base.BaseResponse;
 import com.fisbank.service.ProductService;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.FileNotFoundException;
 
 @RestController
 @RequestMapping("/admin/product")
@@ -57,6 +60,11 @@ public class ProductController {
     @PostMapping("/delete-detail")
     public ResponseEntity<BaseResponse> deleteProductDetail(@RequestBody ProductRequest productRequest){
         return new ResponseEntity<>(productService.deleteProductDetail(productRequest), HttpStatus.OK);
+    }
+
+    @PostMapping("/export")
+    public ResponseEntity<BaseResponse> exportProduct(@RequestBody ProductRequest productRequest) throws JRException, FileNotFoundException {
+        return new ResponseEntity<>(productService.exportFileProduct(productRequest), HttpStatus.OK);
     }
 
     // color controller

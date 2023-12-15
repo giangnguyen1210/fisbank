@@ -36,10 +36,11 @@ public class SecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests().requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/admin/**").permitAll()
-                .anyRequest().authenticated()
-//                .authorizeRequests().anyRequest().permitAll()
+                .authorizeRequests()
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/admin/**").hasAuthority("1")
+//                .anyRequest().authenticated()
+//                .anyRequest().permitAll()
                 .and()
                 .httpBasic();
 

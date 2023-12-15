@@ -10,10 +10,23 @@ import com.fisbank.dto.response.SizeResponse;
 import com.fisbank.dto.response.base.BaseResponse;
 import com.fisbank.mapper.*;
 import com.fisbank.service.ProductService;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JRCsvExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleWriterExporterOutput;
+import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -74,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
 //            return baseResponse;
 //        }
         baseResponse.setData(productResponses);
-        baseResponse.setTotalRecords(productResponses.size());
+        baseResponse.setTotalRecords(productMapper.totalProduct());
 
         return baseResponse;
     }
@@ -151,6 +164,44 @@ public class ProductServiceImpl implements ProductService {
             baseResponse.setData("delete fail");
         }
         return baseResponse;
+    }
+
+    @Override
+    public BaseResponse exportFileProduct(ProductRequest productRequest) throws JRException, FileNotFoundException {
+        String path = "/Users/hongnguyen/Documents/Giang/2023/intern-fis/downloads/";
+        List<ProductResponse> productResponses = productMapper.getListProduct(productRequest);
+        File file = ResourceUtils.getFile("classpath:product.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(productResponses);
+        Map<String, Object> map = new HashMap<>();
+        map.put("name","Giang");
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map,dataSource);
+        if(productRequest.getFormat().equalsIgnoreCase("pdf")){
+            JasperExportManager.exportReportToPdfFile(jasperPrint, path+"product.pdf");
+        }
+        if(productRequest.getFormat().equalsIgnoreCase("html")){
+            JasperExportManager.exportReportToHtmlFile(jasperPrint, path+"/product.html");
+        }
+        if(productRequest.getFormat().equalsIgnoreCase("csv")){
+            //  Csv
+            JRCsvExporter exporter = new JRCsvExporter();
+            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+            exporter.setExporterOutput(
+                    new SimpleWriterExporterOutput(path+"/product.csv"));
+            exporter.exportReport();
+        }
+        if(productRequest.getFormat().equalsIgnoreCase("excel")){
+            //  Csv
+            JRXlsxExporter exporter = new JRXlsxExporter();
+            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(path+"/product.xlsx"));
+            SimpleXlsxReportConfiguration reportConfig
+                    = new SimpleXlsxReportConfiguration();
+            reportConfig.setSheetNames(new String[] { "Product-Data" });
+            exporter.setConfiguration(reportConfig);
+            exporter.exportReport();
+        }
+        return null;
     }
     // color service
 

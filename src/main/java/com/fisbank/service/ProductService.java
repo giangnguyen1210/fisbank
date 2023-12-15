@@ -5,6 +5,9 @@ import com.fisbank.dto.request.ProductRequest;
 import com.fisbank.dto.request.SizeRequest;
 import com.fisbank.dto.response.ProductResponse;
 import com.fisbank.dto.response.base.BaseResponse;
+import net.sf.jasperreports.engine.JRException;
+
+import java.io.FileNotFoundException;
 
 public interface ProductService {
     BaseResponse addNewProduct(ProductRequest productRequest);
@@ -18,6 +21,8 @@ public interface ProductService {
 
     BaseResponse deleteProduct(ProductRequest productRequest);
     BaseResponse deleteProductDetail(ProductRequest productRequest);
+    BaseResponse exportFileProduct(ProductRequest productRequest) throws JRException, FileNotFoundException;
+
 
     BaseResponse addNewColor(ColorRequest colorRequest);
 
@@ -27,6 +32,7 @@ public interface ProductService {
 
     BaseResponse addNewSize(SizeRequest sizeRequest);
     BaseResponse getListSize(SizeRequest sizeRequest);
+
 
 
 

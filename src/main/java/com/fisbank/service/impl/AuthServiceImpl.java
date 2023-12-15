@@ -67,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
         BaseResponse baseResponse = new BaseResponse();
         String hashedPassword = passwordEncoder.encode(request.getPassword());
         request.setPassword(hashedPassword);
-        request.setRole(1);
+        request.setRoleId(1);
         if (request.getName() != null && request.getEmail() != null
         ) {
             String id = "FISBANK-";

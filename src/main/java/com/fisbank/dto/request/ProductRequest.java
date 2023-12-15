@@ -26,4 +26,6 @@ public class ProductRequest {
     private String image;
     private int page;
     private int limit;
+    private String keyword;
+    private String format;
 }
