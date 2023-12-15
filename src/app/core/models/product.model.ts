@@ -10,6 +10,8 @@ export interface Product{
     sold: number;
     remain: number;
     price: number;
+    page:number;
+    limit:number;
 }
 
 export interface Color{

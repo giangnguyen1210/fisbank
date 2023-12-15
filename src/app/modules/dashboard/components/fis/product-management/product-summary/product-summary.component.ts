@@ -13,7 +13,7 @@ export class ProductSummaryComponent implements OnInit {
   total: number | undefined;
 
   ngOnInit(): void {
-    this.productService.getProducts().subscribe(
+    this.productService.getProducts({}).subscribe(
       (data) => {
         console.log('API Response:', data);
         this.total=data.totalRecords;

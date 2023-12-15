@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Product, ProductDetail, ProductList, ProductRequest } from 'src/app/core/models/product.model';
 import { ProductService } from 'src/app/core/services/product.service';
@@ -10,28 +11,97 @@ import { ProductRequestService } from 'src/app/core/services/request/product-req
   styleUrls: ['./product-list.component.scss']
 })
 export class ProductListComponent implements OnInit {
-  totalSize = 0;
-  pageSize = 10;
-  pageNumber = 1;
+  
+
+  @Input() totalSize: number = 0;
+  @Input() pageSize: number = 2;
+  @Input() pageNumber: number = 1;
+  @Output() pageChange: EventEmitter<number> = new EventEmitter<number>();
+
   productList: ProductList = { totalRecords: 0, data: [] };
   showModal: boolean = false;
   product!: ProductDetail;
   selectedProduct: any;
+  form:any;
   
-  constructor(private productService: ProductService, private productRequestService: ProductRequestService, private router: Router) { }
+  constructor(private productService: ProductService, 
+    private productRequestService: ProductRequestService, 
+    private router: Router,
+    private fb: FormBuilder ) { }
   base64ImageData: string = '';
   ngOnInit(): void {
-    this.productService.getProducts().subscribe(
+    this.initForm();
+    this.getService();
+  }
+
+  search(){
+    const keyword = this.form.get('keyword').value;
+    // Perform your search logic using the 'keyword' value
+    console.log('Searching for:', keyword);
+    this.getService();
+    // Call your service or update data accordingly
+  }
+  getService() {
+    const json = {
+      page: this.pageNumber,
+      limit: this.pageSize,
+      keyword: this.form.get('keyword').value
+    };
+    this.productService.getProducts(json).subscribe(
       (data) => {
         this.productList.data = data.data;
         this.productList.totalRecords = data.totalRecords;
         // console.log(this.productList.data);
-        console.log(this.productList.data);
+        this.totalSize = data.totalRecords;
+        console.log(this.totalSize);
+        // this.productList.data.
       },
       (error) => {
         console.error('API Error:', error);
       }
     );
+  }
+  get totalPages(): number {
+    return Math.ceil(this.totalSize / this.pageSize);
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, index) => index + 1);
+  }
+
+  changePage(newPage: number): void {
+    if (newPage >= 1 && newPage <= this.totalPages && newPage !== this.pageNumber) {
+      this.pageNumber = newPage;
+      console.log(this.pageNumber);
+      this.pageChange.emit(this.pageNumber);
+    }
+    this.getService();
+  }
+
+  changePage1(newPage: number, page: any): void {
+    if (newPage >= 1 && newPage <= this.totalPages && newPage !== this.pageNumber) {
+      this.pageNumber = newPage;
+      console.log(newPage, page);
+      this.pageChange.emit(this.pageNumber);
+    }
+  }
+   initForm() {
+    this.form = this.fb.group({
+      productId: [],
+      name: [null],
+      description: [null],
+      category: [null],
+      discount: [],
+      rate: [],
+      quantity: [],
+      sold: [],
+      remain: [],
+      price:[],
+      size: [],
+      color:[],
+      image: [],
+      keyword: []
+    });
   }
   navigateTo(route: string): void {
     this.router.navigate([route]);
@@ -97,5 +167,9 @@ export class ProductListComponent implements OnInit {
       this.selectedProduct = null;
       this.showModal = false;
     }
+  }
+
+  exportFile(format: any){
+    this.productService.exportFile({format}).subscribe(()=>{})
   }
 }

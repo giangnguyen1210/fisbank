@@ -91,7 +91,7 @@
                             
                         </td>
                         <td class="px-6 py-4">
-                              <select formControlName="role">
+                              <select formControlName="roleId">
                                 <option *ngFor="let ro of roles" [value]="ro.id">{{ ro.name }}</option>
                             </select>
                                 <!-- <input formControlName="role" class="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500" type="text" value="{{user.role}}"/> -->
@@ -108,6 +108,16 @@
                             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md w-20" (click)="cancel()">Cancel</button>
                         </td>
 
+                        <!-- <div *ngIf="showModalUpdate" class="fixed inset-0 bg-gray-500 bg-opacity-30 flex items-center justify-center">
+                            <div class="bg-white p-8 rounded shadow-md">
+                              <div class="text-xl mb-4">Confirm Updation</div>
+                              <div>Are you sure you want to update {{selectedUser.name}}, {{selectedUser.id}}, {{userForm.value.roleId}}</div>
+                              <div class="mt-4 flex justify-end">
+                                <button class="bg-gray-300 px-4 py-2 mr-2" (click)="cancelUpdate()">Cancel</button>
+                                <button class="bg-red-500 text-white px-4 py-2" (click)="confirmUpdate(user)">Update</button>
+                              </div>
+                            </div>
+                          </div> -->
                     </ng-container>
                     
                 </ng-template>

@@ -16,10 +16,10 @@ export class ProductService {
 
   }
 
-  getProducts(): Observable<ProductList> {
+  getProducts(product: any): Observable<ProductList> {
     const url = `${this.apiUrl}/admin/product/list`
     const headers = this.headerService.getHeaders()
-    return this.http.post(url, {}, { headers }).pipe(
+    return this.http.post(url, product, { headers }).pipe(
       map((response: any) => {
         console.log(response);
         return response;
@@ -36,6 +36,15 @@ export class ProductService {
     );
   }
 
+
+  exportFile(format: any) : Observable<ProductDetail[]>{
+    const headers = this.headerService.getHeaders()
+    return this.http.post(`${this.apiUrl}/admin/product/export`, format,{headers}).pipe(
+      map((response: any) => {
+        return response.data;
+      })
+    );
+  }
   // getItemDetail(productId: any): Observable<ProductDetail[]> {
   //   const headers = this.headerService.getHeaders()
   //   return this.http.post(`${this.apiUrl}/admin/product/item-detail`, {productId},{headers}).pipe(

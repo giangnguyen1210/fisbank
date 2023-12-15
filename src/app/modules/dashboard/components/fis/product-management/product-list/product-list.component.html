@@ -1,4 +1,30 @@
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4">
+    <div [formGroup]="form" class="pb-4 bg-white dark:bg-gray-900">
+      <label for="table-search" class="sr-only">Search</label>
+      <div class="relative mt-1">
+          <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+              <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+              </svg>
+          </div>
+          <input type="text" (keyup)="search()" formControlName="keyword" id="table-search" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items">
+          
+        </div>
+        <div class="mt-4 flex justify-end">
+          <button class="bg-blue-500 text-white px-4 py-2" (click)="exportFile('pdf')">Export</button>
+        </div>
+        <div>
+          <label for="size" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Format</label>
+          <select formControlName="format" id="size" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+            <option value="pdf">pdf</option>
+            <option value="html">html</option>
+            <option value="csv">csv</option>
+            <option value="excel">excel</option>
+            
+          </select>
+        </div>
+  </div>
+  
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -54,8 +80,6 @@
                 </td>
                 <td class="px-6 py-4">
                     <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md w-20" (click)="openDeleteModal(product.productId)">Delete</button>
-                    
-                    
                 </td>
 
                 <div *ngIf="showModal" class="fixed inset-0 bg-gray-500 bg-opacity-20 flex items-center justify-center">
@@ -72,30 +96,52 @@
             </tr>
         </tbody>
     </table>
-    <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
-        <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Showing <span class="font-semibold text-gray-900 dark:text-white">1-10</span> of <span class="font-semibold text-gray-900 dark:text-white">1000</span></span>
-        <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
-            </li>
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-            </li>
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-            </li>
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
-            </li>
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
-            </li>
-            <li>
-        <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
-            </li>
-        </ul>
-    </nav>
+    <div class="flex items-center justify-between col-span-12 mt-4">
+
+        <div class="flex items-center space-x-2">
+          <span class="text-gray-600">Showing</span>
+          <span class="font-medium">{{ totalSize === 0 ? 0 : (pageNumber - 1) * pageSize + 1 }}</span>
+          <span class="text-gray-600">to</span>
+          <span class="font-medium">{{ (pageNumber * pageSize < totalSize) ? (pageNumber * pageSize) : totalSize }}</span>
+          <span class="text-gray-600">of</span>
+          <span class="font-medium">{{ totalSize }}</span>
+        </div>
+      
+        <div class="flex items-center space-x-4">
+      
+          <!-- Previous button -->
+          <button
+            [disabled]="pageNumber === 1"
+            (click)="changePage(pageNumber - 1)"
+            class="px-3 py-1 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded hover:bg-gray-100 focus:outline-none focus:ring focus:border-blue-300 disabled:opacity-50"
+          >
+            Previous
+          </button>
+      
+          <!-- Page numbers -->
+          <div class="flex space-x-2">
+            <button
+              *ngFor="let page of pages"
+              [class.bg-blue-500]="page === pageNumber"
+              (click)="changePage1(page, pageNumber)"
+              class="px-3 py-1 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded hover:bg-gray-100 focus:outline-none focus:ring focus:border-blue-300"
+            >
+              {{ page }}
+            </button>
+          </div>
+      
+          <!-- Next button -->
+          <button
+            [disabled]="pageNumber === totalPages"
+            (click)="changePage(pageNumber + 1)"
+            class="px-3 py-1 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded hover:bg-gray-100 focus:outline-none focus:ring focus:border-blue-300 disabled:opacity-50"
+          >
+            Next
+          </button>
+      
+        </div>
+      </div>
+      
+      
+      
 </div>

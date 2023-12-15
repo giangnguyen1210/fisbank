@@ -18,6 +18,8 @@ import { UserListComponent } from './components/fis/user-management/user-list/us
 import { UserSummaryComponent } from './components/fis/user-management/user-summary/user-summary.component';
 import { UserFormComponent } from './components/fis/user-management/user-form/user-form.component';
 import { UserDetailComponent } from './components/fis/user-management/user-detail/user-detail.component';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -35,11 +37,14 @@ import { UserDetailComponent } from './components/fis/user-management/user-detai
     UserSummaryComponent,
     UserFormComponent,
     UserDetailComponent,
+    
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule,
+    NgxPaginationModule
   ],
 })
 export class DashboardModule {}

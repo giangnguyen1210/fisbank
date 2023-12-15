@@ -20,11 +20,25 @@ export class UserListComponent {
   userForm: any;
   userDetail: any;
   showModal: boolean = false;
+  showModalUpdate: boolean = false;
   roles: Role[]= [];
   status: Status[]= [];
   selectedUser: any;
 
   ngOnInit(): void {
+    this.getService();
+    this.userForm = this.fb.group({
+      id: [''],
+      name: [''],
+      email: [''],
+      roleId: [],
+      roleName:[],
+      status: [],
+      statusName: []
+    });
+  }
+
+  getService(){
     this.userService.getUserList().subscribe(
       (data) => {
         console.log('API Response:', data);
@@ -49,15 +63,6 @@ export class UserListComponent {
         console.log(this.status);
       }
     )
-    this.userForm = this.fb.group({
-      id: [''],
-      name: [''],
-      email: [''],
-      role: [],
-      roleName:[],
-      status: [],
-      statusName: []
-    });
   }
   navigateTo(route: string): void {
     this.router.navigate([route]);
@@ -97,14 +102,20 @@ export class UserListComponent {
   }
 
   update(user:any){
-    console.log(user);
+    this.userDetail = this.userList.data.find(u=>u.id===user.id);
+
+    
+    this.userForm.patchValue(user);
     console.log(this.userForm);
+    this.editing = false;
     this.userRequestService.updateUser(this.userForm.value).subscribe(
       (data)=>{
         console.log(data);
       }
     )
+    this.getService();
   }
+
   cancel(){
     this.editing = false;
   }
@@ -122,9 +133,11 @@ export class UserListComponent {
 
   confirmDelete(user:any){
     this.userRequestService.deleteUser(user).subscribe(
-      (data)=>{
-        console.log(data);
+      (response)=>{
+        window.location.reload();
       }
     )
+    this.showModal = false;
   }
+
 }

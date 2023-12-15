@@ -3,7 +3,7 @@ export interface User{
     name: string;
     email: string;
     roleName: string;
-    role: string;
+    roleId: number;
     statusName: string;
     status: string;
     avatar: string;
@@ -19,7 +19,7 @@ export interface UserRequest{
     name: string;
     email: string;
     roleName: string;
-    role: string;
+    roleId: number;
     statusName: string;
     status: string;
     avatar: string;

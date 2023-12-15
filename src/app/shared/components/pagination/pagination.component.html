@@ -1,0 +1,31 @@
+<div class="row col-12 pr-0 justify-between items-center">
+
+    <!-- Show Rows Dropdown -->
+    <div class="p-0 col-sm-12 col-md-4 col-lg-4 col-xl-3 pr-0 hidden md:block">
+      <div class="dataTables_length">
+        <label class="flex items-center">Show
+          <select #t name="tickets-table_length" aria-controls="tickets-table" name="pageSize"
+            class="form-select custom-select custom-select-sm form-control form-control-sm mx-2">
+            <option [value]="10">10</option>
+            <option [value]="25">25</option>
+            <option [value]="50">50</option>
+          </select>
+          rows</label>
+      </div>
+    </div>
+  
+    <!-- Show Range Info -->
+    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4 mt-md-0 hidden xl:block text-center">
+      Show
+      {{ totalSize === 0 ? 0 : (pageNumber - 1) * pageSize + 1 }}
+      - {{ pageNumber * pageSize }} of
+      {{ totalSize }}
+    </div>
+  
+    <!-- Pagination -->
+    <div class="p-0 col-sm-12 col-md-8 col-lg-4 col-xl-5">
+      <div class="text-md-right float-md-right mt-2">
+      </div>
+    </div>
+  </div>
+  
